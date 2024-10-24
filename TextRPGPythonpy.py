@@ -2,7 +2,7 @@ from random import randint
 from random import choice
 def main():
     chars = {
-        'MainCharacter':{'Name':'', 'Sex':'', 'Class':'', 'Stats':{'Health':100, 'Defense':5,'Level':0 ,'XP':0}, 'Moves':{'Attacks':{}, 'Defense':{}}, 'Inventory':['Small health potion', 'Medium health potion','Large health potion']},
+        'MainCharacter':{'Name':'', 'Sex':'', 'Class':'', 'Stats':{'Health':100, 'Defense':5,'Level':0 ,'XP':0}, 'Money':0, 'Moves':{'Attacks':{}, 'Defense':{}}, 'Inventory':['Small health potion', 'Medium health potion','Large health potion']},
         'BanditLeader':{'Name':'Bandit Leader', 'Sex':'Male', 'Class':'Bandit', 'Stats':{'Health':125}, 'Moves':{'Attacks':{'Throwing Axe':13,'Strike':18}, 'Defense':{}}, 'Inventory':[None]},
         'Bandit':{'Name':'Bandit', 'Sex':'Male', 'Class':'Bandit', 'Stats':{'Health':75}, 'Moves':{'Attacks':{'Strike':13,'Bleed':10}, 'Defense':{}}, 'Inventory':[None]}     
         } 
@@ -24,7 +24,9 @@ Input: """
         ) ) 
         if menu_input==1:
             print('\n'*40)
-            new_game(chars, chars['MainCharacter'], items)           
+            new_game(chars, chars['MainCharacter'], items) 
+            print('\n\n----ACT 1----')
+            act1(chars, chars['MainCharacter'], items, ally_choice_1)          
         elif menu_input==2:
             ...
         elif menu_input==3:
@@ -160,7 +162,6 @@ Prompt: ''')
                             for no_of_enemies in range(len(enemies)):
                                 enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
                                 enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
-                                resdef = PC['Stats']['Defense']
                                 PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90:
                                     print("\nAttack dodged.")
@@ -170,7 +171,6 @@ Prompt: ''')
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
-                                PC['Stats']['Defense'] = resdef
                                 
                         elif PCdefense == '3' and len(PC_defs)>2:
                             for no_of_enemies in range(len(enemies)):
@@ -253,7 +253,12 @@ Prompt: ''')
         else:
             print("################### Wrong Input, try again. ###################")
             continue
-        
+    if PC['Stats']['Health'] <= 0:
+        Victory=False
+        return Victory
+    elif EnemyAlive==False:
+        Victory=True
+        return Victory    
             
             
         
@@ -298,12 +303,12 @@ Narrator:"You are... "\n\n'''
         if MainChar['Class'] == "1" or MainChar['Class'] == "warrior":
             MainChar['Class'] = 'Warrior'
             MainChar['Moves']['Attacks'] = {'Lunge':20}
-            MainChar['Moves']['Defense'] = {'Brace':25}
+            MainChar['Moves']['Defense'] = {'Brace':15}
             break
         elif MainChar['Class'] == "2" or MainChar['Class'] == "mage":
             MainChar['Class'] = 'Mage'
             MainChar['Moves']['Attacks'] = {'Zap':30}
-            MainChar['Moves']['Defense'] = {'Mist':15}
+            MainChar['Moves']['Defense'] = {'Mist':8}
             break
         else:
             print("Wrong Input, try again.")
@@ -404,12 +409,96 @@ Narrator:
 "Before you can make your decision final, a shout echoes through the ruins, and several figures emerge from the shadows—bandits, looking to loot whatever they can from the wreckage of Eldevar."
 
 Bandit Leader:
-"More survivors, huh? Hand over your weapons, and we might let you live."
+"More survivors, huh? We're not gonna let you get away without a fight!"
 
           ''')
-    combat([chars['BanditLeader'], chars['Bandit']], MainChar, items, runaway=False)
-        
+    while True:
+        combat([chars['BanditLeader'], chars['Bandit']], MainChar, items, runaway=False)
+        if Victory==False:
+            print("\nNarrator: This was just the tutorial fight, you can keep trying it again and again until you win, resetting fight...")
+            MainChar['Stats']['Health']=100
+            MainChar['Inventory'] = ['Small health potion', 'Medium health potion','Large health potion']
+        elif Victory==True:
+            print("You have won the battle.")
+            break
+    input('''
+Narrator: After defeating the bandits, the story moves forward with all three of them reaching a wrecked nearby village with still people surviving in there before deciding what they're gonna do, in the meantime you tell them of your lost memories...
+          \n\n''')
+    if MainChar['Class'] == 'Warrior':
+        input('''
+Narrator: Kornak tells you have you were a reputed war chief in the army of Norwind, and that you fought alongside each other once, although none of you know each other personally, and he doesn't know anything else about  you...a unique challenge comes in front as you reached the village.
+              ''') 
+    elif MainChar['Class'] == 'Mage':
+        input('''
+Narrator: Selena tells you about your past as one of the most skilled mages in the kingdom, where you were one of the most famous trainers, and were guarding an important point from Norwind's warrior's, she says she doesn't have a clue how you wounded up here, she says that you should stick with her, as she knows the most about the staff at the present time and she can help in restoring your memories...maybe, meanwhile Konrak observes keenly, and obviously.
+              ''')
+    input('''
+          Narrator: You reach the square of the village.
+          
+          Selena: "This is where we part ways, Konrak, and I hope we've reached an understanding that you won't hunt me down after you reunite with your band of warriors.
+          
+          Konrak: "Fair enough, I don't have time to waste, I'll do my best to hunt down that staff...but what about..."
+          
+          Narrator: As they both turn to look at you...
+          ''')
+    if ally_choice_1 == '1':
+        input('''Selena: "I remember you wisely decided to ally with me back there, I can help you reach the staff, we should work together, you're strong. Get yourself ready, and when you are, meet me in the tavern..."
 
+Narrator: Konrak had suddenly disappeared while she was speaking before you could notice...either way...you agreed and now need to decide what you do next....
+              ''')
+        return
+    elif ally_choice_1 == '2':
+        input('''Konrak: "I believe you'll still be sticking by me, I'll set up a camp outside the village and rest, meet me there, meanwhile warriors from Norwind will be coming here. Be on our side, and the power of the Norwind kingdom's army will successfully fight through the challenges to reach the staff."
+
+Selena: "Well, I hope we don't have to cross paths again..."
+
+Narrator: Selena had disappeared between the buildings rather quickly...either way...you agreed and now need to decide what you do next....
+              ''')
+        return
+    elif ally_choice_1 == '3':
+        input('''
+Selena: "Meet me at the tavern, if you want to get to the staff, currently I might be the only who knows the most about it"
+
+Konrak: "Meh...you're strong, join me at my camp outside if you wanna fight alongside the Norwind kingdom to reach the staff, we actually have the manpower to make it happen and we will."
+
+Narrator: You're left in the middle of the townsquare to decide, meanwhile they both left without saying anything else more. Now you need to make a choice...
+     
+              ''')
+        while True:
+            ally_choice_1 = input('''1. Go with Korlak
+2. Go with Selena
+
+Prompt:  ''')
+            if ally_choice_1 == '1':
+                return ally_choice_1             
+            elif ally_choice_1 == '2':
+                return ally_choice_1
+            else:
+                print("################### Wrong Input, try again. ###################")
+    else:
+        print("################### Wrong Input, try again. ###################")
+    
+def act1(chars, MainChar, items, ally):
+    if ally=='1':
+        print('''
+1. Go to the tavern (Continue Story - Not available in demo version)
+2. Visit the Alchemist and Exilir shop
+3. Go out in the wild
+
+
+              ''')
+    elif ally='2':
+        print('''
+1. Go to the camp (Continue Story - Not available in demo version)
+2. Visit the Alchemist and Exilir shop
+3. Go out in the wild
+
+
+              ''')
+    action = input('Prompt: ')
+    while True:
+        if action=='1':
+        
     
     
 

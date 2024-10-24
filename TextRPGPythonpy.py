@@ -35,22 +35,24 @@ def combat(enemies, PC, items, runaway=True):
     for enemy in range(len(enemies)-1):
         print(enemies[enemy]['Name'])
     print('\n\n\n')
-    while PC['Stats']['Health']>0:
+    EnemyAlive=True
+    while PC['Stats']['Health']>0 and EnemyAlive==True:
         move = input('''
-    1. Moves
-    2. Inventory
-    3. Run Away
+1. Moves
+2. Inventory
+3. Run Away
 
 
-            ''')
+Prompt: ''')
+        
         if move=='1':
             print('1. Attacks: ')
             for PCattacks in PC['Moves']['Attacks']:
                 print(PCattacks)
-            print('2. Defenses: ')
+            print('\n2. Defenses: ')
             for defenses in PC['Moves']['Defense']:
                 print(defenses)
-            atk_or_def = input("Choose an input: ")
+            atk_or_def = input("\nPrompt: ")
             while True:
                 if atk_or_def == '1' and len(tuple(PC['Moves']['Attacks'].keys()))>0:
                     PCattacks = PC['Moves']['Attacks']
@@ -58,7 +60,7 @@ def combat(enemies, PC, items, runaway=True):
                     for atks in range(len(PCatk_Index)):
                         print(str(atks+1)+'. '+PCatk_Index[atks])
                     while True:
-                        PCattack = input("Choose an attack: ")                   
+                        PCattack = input("\nChoose an attack: ")                   
                         if PCattack == '1' and len(PCatk_Index)>0:
                             for no_of_enemies in range(len(enemies)):
                                 enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
@@ -66,14 +68,22 @@ def combat(enemies, PC, items, runaway=True):
                                 
                                 enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90:
-                                    print("Attack dodged.")
+                                    print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
-                                    print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
+                                    print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
+                            
+                            for health_of_enemies in range(len(enemies)):
+                                if enemies[health_of_enemies]['Stats']['Health'] > 0:
+                                    EnemyAlive = True  # At least one enemy is alive, we don't need to do anything
+                                    break
+                                else:
+                                    # This 'else' corresponds to the 'for' loop, meaning if no break occurs (i.e., all enemies are dead)
+                                    EnemyAlive = False  # All enemies are dead if the loop completes without finding a 
                                                            
                                 
                         elif PCattack == '2' and len(PCatk_Index)>1:

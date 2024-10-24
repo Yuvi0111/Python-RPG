@@ -2,12 +2,15 @@ from random import randint
 from random import choice
 def main():
     chars = {
-        'MainCharacter':{'Name':'', 'Sex':'', 'Class':'', 'Stats':{'Health':100, 'Defense':5,'Level':0 ,'XP':0}, 'Money':0, 'Moves':{'Attacks':{}, 'Defense':{}}, 'Inventory':['Small health potion', 'Medium health potion','Large health potion']},
+        'MainCharacter':{'Name':'', 'Sex':'', 'Class':'', 'Stats':{'Health':100, 'Defense':5,'Level':0 ,'XP':0}, 'Money':0, 'Moves':{'Attacks   ':{}, 'Defense':{}}, 'Inventory':['Small health potion', 'Medium health potion','Large health potion']},
         'BanditLeader':{'Name':'Bandit Leader', 'Sex':'Male', 'Class':'Bandit', 'Stats':{'Health':125}, 'Moves':{'Attacks':{'Throwing Axe':13,'Strike':18}, 'Defense':{}}, 'Inventory':[None]},
-        'Bandit':{'Name':'Bandit', 'Sex':'Male', 'Class':'Bandit', 'Stats':{'Health':75}, 'Moves':{'Attacks':{'Strike':13,'Bleed':10}, 'Defense':{}}, 'Inventory':[None]}     
+        'Bandit':{'Name':'Bandit', 'Sex':'Male', 'Class':'Bandit', 'Stats':{'Health':75}, 'Moves':{'Attacks':{'Strike':13,'Bleed':10}, 'Defense':{}}, 'Inventory':[None]},
+        'Goblin':{'Name':'Goblin', 'Sex':'Undefined', 'Class':'Humanoid Monster', 'Stats':{'Health':60}, 'Moves':{'Attacks':{'Scratch':15,'Bleed':12}, 'Defense':{}}, 'Inventory':[None]},
+        'Gorgon':{'Name':'Gorgon', 'Sex':'Undefined', 'Class':'Humanoid Monster', 'Stats':{'Health':70}, 'Moves':{'Attacks':{'Freeze':15,'Slap':20}, 'Defense':{}}, 'Inventory':[None]},
+        'Hostile Nordwin Warrior':{'Name':'Hostile Nordwin Warrior', 'Sex':'Male', 'Class':'Nordwin', 'Stats':{'Health':80}, 'Moves':{'Attacks':{'Stab':16,'Kick':11}, 'Defense':{}}, 'Inventory':[None]}
         } 
     items = {
-        'Health Consumables':{'Small health potion':20, 'Medium health potion':40, 'Large health potion':60}
+        'Health Consumables':{'Small health potion':20, 'Medium health potion':40, 'Large health potion':60, 'Defense boost':40}
         }
     menu(chars, items)
 
@@ -255,8 +258,24 @@ Prompt: ''')
             continue
     if PC['Stats']['Health'] <= 0:
         Victory=False
+        PC['Stats']['Health'] += 100
+        money_lost = randint(0,30)
+        if PC['Money']>money_lost:
+            PC['Money'] -= money_lost
+            print("Some of your money was lost upon defeat...")
         return Victory
     elif EnemyAlive==False:
+        print("Narrator: You have won the battle.")
+        money_earned = randint(0,80)
+        xp_earned = randint(0,100)
+        PC['Money'] += money_earned
+        PC['Stats']['XP'] += xp_earned
+        PC['Stats']['Health'] += 25
+        print("You earned", money_earned, "coins")
+        print("Total balance:", PC['Money'])
+        print("XP Earned:", xp_earned)
+        print("Total XP:", PC['Stats']['XP'])
+        
         Victory=True
         return Victory    
             
@@ -419,7 +438,6 @@ Bandit Leader:
             MainChar['Stats']['Health']=100
             MainChar['Inventory'] = ['Small health potion', 'Medium health potion','Large health potion']
         elif Victory==True:
-            print("You have won the battle.")
             break
     input('''
 Narrator: After defeating the bandits, the story moves forward with all three of them reaching a wrecked nearby village with still people surviving in there before deciding what they're gonna do, in the meantime you tell them of your lost memories...
@@ -478,26 +496,80 @@ Prompt:  ''')
     else:
         print("################### Wrong Input, try again. ###################")
     
-def act1(chars, MainChar, items, ally):
-    if ally=='1':
-        print('''
-1. Go to the tavern (Continue Story - Not available in demo version)
-2. Visit the Alchemist and Exilir shop
-3. Go out in the wild
-
-
-              ''')
-    elif ally='2':
-        print('''
-1. Go to the camp (Continue Story - Not available in demo version)
-2. Visit the Alchemist and Exilir shop
-3. Go out in the wild
-
-
-              ''')
-    action = input('Prompt: ')
+def act1(chars, MainChar, items, ally):    
     while True:
+        if ally=='1':
+            print('''
+    1. Go to the tavern (Continue Story - Not available in demo version)
+    2. Visit the Alchemist and Exilir shop
+    3. Go out in the wild
+
+
+                ''')
+            
+        elif ally=='2':       
+            print('''
+    1. Go to the camp (Continue Story - Not available in demo version)
+    2. Visit the Alchemist and Exilir shop
+    3. Go out in the wild
+
+                ''')
+            
+        action = input('Prompt: ')
         if action=='1':
+            print("The game demo doesn't feature further story. Try selecting other options")
+        elif action=='2':
+            print('''
+Narrator: You enter the shop, it almost seems empty, makes sense given the war. The shopkeeper passes you a ledger with the list of items available, not keen to talk, here is the list of items:
+
+1. Small health potion - 50 coins
+2. Medium health potion - 100 coins
+3. Large health potion - 150 coins
+4. Defense boost - 125 coins
+                  ''')
+            while True:
+                action = input('Prompt to buy: ')
+                if action=='1':
+                    if MainChar['Money'] > 50:
+                        MainChar['Money']-=50
+                        MainChar['Inventory'].append('Small health potion')
+                        print('Purchased successfully.')
+                        break
+                elif action=='2':
+                    if MainChar['Money'] > 100:
+                        MainChar['Money']-=100
+                        MainChar['Inventory'].append('Medium health potion')
+                        print('Purchased successfully.')
+                        break
+                elif action=='3':
+                    if MainChar['Money'] > 150:
+                        MainChar['Money']-=150
+                        MainChar['Inventory'].append('Large health potion')
+                        print('Purchased successfully.')
+                        break
+                elif action=='4':
+                    if MainChar['Money'] > 125:
+                        MainChar['Money']-=125
+                        MainChar['Inventory'].append('Defense boost')
+                        print('Purchased successfully.')
+                        break
+                else:
+                    print("################### WRONG INPUT ########################")
+        elif action=='3':
+            print('''
+You take a stroll outside in the wild looking for some adventure...
+
+
+                  ''')
+            if randint(0,100)>=60:
+                print("You find yourself in an ambush!")
+                while True:
+                    enemy = choice(tuple(chars.keys()))
+                    if enemy != 'MainCharacter':
+                        combat([enemy], MainChar, items, runaway=True)
+                        print("\n\nYou return back to the town after the encounter, resting and replinishing yourself.")
+            elif randint(0,100)<60:
+                print("Nothing exciting happens.")
         
     
     
@@ -508,5 +580,6 @@ def act1(chars, MainChar, items, ally):
     
     
         
-        
+    
+    
 main()

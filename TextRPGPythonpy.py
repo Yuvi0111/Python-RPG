@@ -16,28 +16,28 @@ def main():
 
 def menu(chars, items):
     while True:
-        menu_input = int(input(
+        menu_input = input(
 """ 
  ------------------------TextRPG----------------------------------
 1. New Game
-2. Load Character (WIP)
+2. Load Character (Not available)
 3. Exit
               
 Input: """
-        ) ) 
-        if menu_input==1:
+        )  
+        if menu_input=='1':
             print('\n'*40)
-            new_game(chars, chars['MainCharacter'], items) 
+            ally_choice_1 = new_game(chars, chars['MainCharacter'], items) 
             print('\n\n----ACT 1----')
             act1(chars, chars['MainCharacter'], items, ally_choice_1)          
-        elif menu_input==2:
-            ...
-        elif menu_input==3:
+        elif menu_input=='2':
+            print("Feature not available in demo version of game")
+        elif menu_input=='3':
             exit()
 
 def combat(enemies, PC, items, runaway=True):
     print('You are now engaged in a battle with: ')
-    for enemy in range(len(enemies)-1):
+    for enemy in range(len(enemies)):
         print(enemies[enemy]['Name'])
     print('\n\n\n')
     EnemyAlive=True
@@ -72,15 +72,15 @@ Prompt: ''')
                                 enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
                                 
                                 enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
-                                if (randint(0,100)+PC['Stats']['Defense'])>90:
+                                if (randint(0,100)+PC['Stats']['Defense'])>90 or enemies[no_of_enemies]['Stats']['Health']<=0:
                                     print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
                                     enemy_attack = choice(enemey_attack_list)
-                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemy_attack)]
+                                    print('\n'+enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                             
@@ -100,8 +100,8 @@ Prompt: ''')
                                     
                                 else:    
                                     enemy_attack = choice(enemey_attack_list)
-                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemy_attack)]
+                                    print('\n'+enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
@@ -118,8 +118,8 @@ Prompt: ''')
                                     
                                 else:    
                                     enemy_attack = choice(enemey_attack_list)
-                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemy_attack)]
+                                    print('\n'+enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
@@ -137,8 +137,8 @@ Prompt: ''')
                                     
                                 else:    
                                     enemy_attack = choice(enemey_attack_list)
-                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemy_attack)]
+                                    print('\n'+enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                         else:
@@ -166,7 +166,7 @@ Prompt: ''')
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
                                 else:    
                                     enemy_attack = choice(enemey_attack_list)
-                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    print('\n'+enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
@@ -182,7 +182,7 @@ Prompt: ''')
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
                                 else:    
                                     enemy_attack = choice(enemey_attack_list)
-                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    print('\n'+enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
@@ -198,7 +198,7 @@ Prompt: ''')
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
                                 else:    
                                     enemy_attack = choice(enemey_attack_list)
-                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    print('\n'+enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
@@ -214,7 +214,7 @@ Prompt: ''')
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
                                 else:    
                                     enemy_attack = choice(enemey_attack_list)
-                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    print('\n'+enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
@@ -281,7 +281,7 @@ Prompt: ''')
             print("Some of your money was lost upon defeat...")
         return Victory
     elif EnemyAlive==False:
-        print("Narrator: You have won the battle.")
+        print("\n\nNarrator: You have won the battle.")
         money_earned = randint(0,80)
         xp_earned = randint(0,100)
         PC['Money'] += money_earned
@@ -301,14 +301,14 @@ Prompt: ''')
 def new_game(chars, MainChar, items):
     #Character's Sex
     while True:
-        MainChar['Sex'] = int(input("""1. Male 
+        MainChar['Sex'] = input("""1. Male 
 2. Female
 Select Gender of the character: """
-                            ))
-        if MainChar['Sex'] == 1:
+                            )
+        if MainChar['Sex'] == '1':
             MainChar['Sex'] = 'Male'
             break
-        elif MainChar['Sex'] == 2:
+        elif MainChar['Sex'] == '2':
             MainChar['Sex'] = 'Female'
             break
         else:
@@ -448,7 +448,7 @@ Bandit Leader:
 
           ''')
     while True:
-        combat([chars['BanditLeader'], chars['Bandit']], MainChar, items, runaway=False)
+        Victory = combat([chars['BanditLeader'], chars['Bandit']], MainChar, items, runaway=False)
         if Victory==False:
             print("\nNarrator: This was just the tutorial fight, you can keep trying it again and again until you win, resetting fight...")
             MainChar['Stats']['Health']=100
@@ -480,7 +480,7 @@ Narrator: Selena tells you about your past as one of the most skilled mages in t
 
 Narrator: Konrak had suddenly disappeared while she was speaking before you could notice...either way...you agreed and now need to decide what you do next....
               ''')
-        return
+        return ally_choice_1
     elif ally_choice_1 == '2':
         input('''Konrak: "I believe you'll still be sticking by me, I'll set up a camp outside the village and rest, meet me there, meanwhile warriors from Norwind will be coming here. Be on our side, and the power of the Norwind kingdom's army will successfully fight through the challenges to reach the staff."
 
@@ -488,7 +488,7 @@ Selena: "Well, I hope we don't have to cross paths again..."
 
 Narrator: Selena had disappeared between the buildings rather quickly...either way...you agreed and now need to decide what you do next....
               ''')
-        return
+        return ally_choice_1
     elif ally_choice_1 == '3':
         input('''
 Selena: "Meet me at the tavern, if you want to get to the staff, currently I might be the only who knows the most about it"
@@ -546,31 +546,40 @@ Narrator: You enter the shop, it almost seems empty, makes sense given the war. 
             while True:
                 action = input('Prompt to buy: ')
                 if action=='1':
-                    if MainChar['Money'] > 50:
+                    if MainChar['Money'] >= 50:
                         MainChar['Money']-=50
                         MainChar['Inventory'].append('Small health potion')
                         print('Purchased successfully.')
                         break
+                    else:
+                        print("Not enough money.")
                 elif action=='2':
-                    if MainChar['Money'] > 100:
+                    if MainChar['Money'] >= 100:
                         MainChar['Money']-=100
                         MainChar['Inventory'].append('Medium health potion')
                         print('Purchased successfully.')
                         break
+                    else:
+                        print("Not enough money.")
                 elif action=='3':
-                    if MainChar['Money'] > 150:
+                    if MainChar['Money'] >= 150:
                         MainChar['Money']-=150
                         MainChar['Inventory'].append('Large health potion')
                         print('Purchased successfully.')
                         break
+                    else:
+                        print("Not enough money.")
                 elif action=='4':
-                    if MainChar['Money'] > 125:
+                    if MainChar['Money'] >= 125:
                         MainChar['Money']-=125
                         MainChar['Inventory'].append('Defense boost')
                         print('Purchased successfully.')
                         break
+                    else:
+                        print("Not enough money.")
                 else:
                     print("################### WRONG INPUT ########################")
+                    break
         elif action=='3':
             print('''
 You take a stroll outside in the wild looking for some adventure...
@@ -580,10 +589,15 @@ You take a stroll outside in the wild looking for some adventure...
             if randint(0,100)>=60:
                 print("You find yourself in an ambush!")
                 while True:
-                    enemy = choice(tuple(chars.keys()))
-                    if enemy != 'MainCharacter':
-                        combat([enemy], MainChar, items, runaway=True)
-                        print("\n\nYou return back to the town after the encounter, resting and replinishing yourself.")
+                    random_enemy = choice(tuple(chars.keys()))
+                    if random_enemy != 'MainCharacter':
+                        Victory = combat([chars[random_enemy]], MainChar, items, runaway=True)
+                        if Victory == True:
+                            print("\n\nYou return back to the town after the victory, resting and replinishing yourself.")
+                            break
+                        elif Victory == False:
+                            print("\n\nYou return back to the town after the defeat, resting and replinishing yourself.")
+                            break
             elif randint(0,100)<60:
                 print("Nothing exciting happens.")
         

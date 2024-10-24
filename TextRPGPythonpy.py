@@ -77,13 +77,7 @@ Prompt: ''')
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                             
-                            for health_of_enemies in range(len(enemies)):
-                                if enemies[health_of_enemies]['Stats']['Health'] > 0:
-                                    EnemyAlive = True  # At least one enemy is alive, we don't need to do anything
-                                    break
-                                else:
-                                    # This 'else' corresponds to the 'for' loop, meaning if no break occurs (i.e., all enemies are dead)
-                                    EnemyAlive = False  # All enemies are dead if the loop completes without finding a 
+                            
                                                            
                                 
                         elif PCattack == '2' and len(PCatk_Index)>1:
@@ -93,16 +87,14 @@ Prompt: ''')
                                 
                                 enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90:
-                                    print("Attack dodged.")
+                                    print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
-                                    print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                    
-                                
+                                    print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
                         elif PCattack == '3' and len(PCatk_Index)>2:
                             for no_of_enemies in range(len(enemies)):
@@ -111,37 +103,34 @@ Prompt: ''')
                                 
                                 enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90:
-                                    print("Attack dodged.")
+                                    print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
-                                    print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                        
-                                
+                                    print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
                                 
                         elif PCattack == '4' and len(PCatk_Index)>3:
-                            enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
-                            enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
-                            
                             for no_of_enemies in range(len(enemies)):
+                                enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
+                                enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
+                                
                                 enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90:
-                                    print("Attack dodged.")
+                                    print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
-                                    print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                    
+                                    print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                         else:
                             print('Wrong input')
-                            continue
+                            continue 
                         break
                                 
                         
@@ -149,63 +138,80 @@ Prompt: ''')
                 elif atk_or_def == '2' and len(tuple(PC['Moves']['Defense'].keys()))>0:
                     PC_defs_dict = PC['Moves']['Defense']
                     PC_defs = tuple(PC['Moves']['Defense'].keys())
-                    enemy_attack_dict = enemies['Moves']['Attacks']
-                    enemey_attack_list = enemies['Moves']['Attacks'].keys()
                     for defss in range(len(PC_defs)):
                         print(str(defss+1)+'. '+PC_defs[defss])
                     while True:
                         PCdefense = input("Choose a defense: ")                   
                         if PCdefense == '1' and len(PC_defs)>0:
-                            PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
-                            if (randint(0,100)+PC['Stats']['Defense'])>90:
-                                print("Attack dodged.")
-                                print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                break
-                            else:    
-                                PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
-                                print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                break
+                            for no_of_enemies in range(len(enemies)):
+                                enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
+                                enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
+                                PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
+                                if (randint(0,100)+PC['Stats']['Defense'])>90:
+                                    print("\nAttack dodged.")
+                                    print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
+                                else:    
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
+                                
                         elif PCdefense== '2' and len(PC_defs)>1:
-                            PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
-                            if (randint(0,100)+PC['Stats']['Defense'])>90:
-                                print("Attack dodged.")
-                                print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                break
-                            else:    
-                                PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
-                                print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                break
+                            for no_of_enemies in range(len(enemies)):
+                                enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
+                                enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
+                                resdef = PC['Stats']['Defense']
+                                PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
+                                if (randint(0,100)+PC['Stats']['Defense'])>90:
+                                    print("\nAttack dodged.")
+                                    print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
+                                else:    
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
+                                PC['Stats']['Defense'] = resdef
+                                
                         elif PCdefense == '3' and len(PC_defs)>2:
-                            PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
-                            if (randint(0,100)+PC['Stats']['Defense'])>90:
-                                print("Attack dodged.")
-                                print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                break
-                            else:    
-                                PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
-                                print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                break
+                            for no_of_enemies in range(len(enemies)):
+                                enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
+                                enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
+                                PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
+                                if (randint(0,100)+PC['Stats']['Defense'])>90:
+                                    print("\nAttack dodged.")
+                                    print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
+                                else:    
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
+                                
                         elif PCdefense == '4' and len(PC_defs)>3:
-                            PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
-                            if (randint(0,100)+PC['Stats']['Defense'])>90:
-                                print("Attack dodged.")
-                                print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                break
-                            else:    
-                                PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
-                                print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
-                                input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                break
+                            for no_of_enemies in range(len(enemies)):
+                                enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
+                                enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
+                                PC['Stats']['Defense'] += PC_defs_dict[PC_defs[int(PCdefense)-1]]
+                                if (randint(0,100)+PC['Stats']['Defense'])>90:
+                                    print("\nAttack dodged.")
+                                    print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
+                                else:    
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
+                                    input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
+                        else:
+                            print('Wrong input')
+                            continue
+                        break        
                             
                 else:
                     print("################### Wrong Input, try again. ###################")
+                for health_of_enemies in range(len(enemies)):
+                                if enemies[health_of_enemies]['Stats']['Health'] > 0:
+                                    EnemyAlive = True 
+                                    break
+                                else:
+                                    EnemyAlive = False  
                 break    
             
         elif move=='2':
@@ -219,7 +225,7 @@ Prompt: ''')
                         PC['Inventory'].remove(item_input)
                         print("Health regained.\nHealth is now: ", PC['Stats']['Health'])
                     else:
-                        print('Unexpected bug, please refrain from using this item and reporting the issue to the developer.')
+                        print('Unexpected bug, please refrain from using this item and report the issue to the developer ~ Yuvraj')
                     
                 else:
                     print('Item not in inventory')
@@ -278,7 +284,7 @@ Select Gender of the character: """
     
     while True:
         MainChar['Class'] = input('''
-YuPrompt:
+Prompt:
 "Who are you?"
 
 1. Warrior (Chief of War from Norwind)

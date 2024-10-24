@@ -109,7 +109,7 @@ def combat(enemies, PC, items, runaway=True):
                                     PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
-                                    
+                                        
                                 
                                 
                                 
@@ -196,6 +196,7 @@ def combat(enemies, PC, items, runaway=True):
                             
                 else:
                     print("################### Wrong Input, try again. ###################")
+                break    
             
         elif move=='2':
             if len(PC['Inventory'])>0:
@@ -236,6 +237,7 @@ def combat(enemies, PC, items, runaway=True):
         else:
             print("################### Wrong Input, try again. ###################")
             continue
+        
             
             
         

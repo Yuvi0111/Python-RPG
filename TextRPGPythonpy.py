@@ -78,7 +78,9 @@ Prompt: ''')
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    enemy_attack = choice(enemey_attack_list)
+                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemy_attack)]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                             
@@ -97,7 +99,9 @@ Prompt: ''')
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    enemy_attack = choice(enemey_attack_list)
+                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemy_attack)]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
@@ -113,7 +117,9 @@ Prompt: ''')
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    enemy_attack = choice(enemey_attack_list)
+                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemy_attack)]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
@@ -130,7 +136,9 @@ Prompt: ''')
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))
                                     
                                 else:    
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    enemy_attack = choice(enemey_attack_list)
+                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemy_attack)]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                         else:
@@ -157,7 +165,9 @@ Prompt: ''')
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
                                 else:    
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    enemy_attack = choice(enemey_attack_list)
+                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
@@ -171,7 +181,9 @@ Prompt: ''')
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
                                 else:    
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    enemy_attack = choice(enemey_attack_list)
+                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
@@ -185,7 +197,9 @@ Prompt: ''')
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
                                 else:    
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    enemy_attack = choice(enemey_attack_list)
+                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                                 
@@ -199,7 +213,9 @@ Prompt: ''')
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health']))                                    
                                 else:    
-                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[choice(enemey_attack_list)]
+                                    enemy_attack = choice(enemey_attack_list)
+                                    print(enemies[no_of_enemies]['Name']+' uses '+enemy_attack)
+                                    PC['Stats']['Health'] = PC['Stats']['Health']-enemy_attack_dict[enemy_attack]
                                     print('\n'+enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
                                     input(PC['Name']+"'s health: " + str(PC['Stats']['Health'])+'\n')
                         else:

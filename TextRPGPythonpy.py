@@ -71,7 +71,10 @@ Prompt: ''')
                                 enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
                                 enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
                                 
-                                enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
+                                if enemies[no_of_enemies]['Stats']['Health'] < 0:
+                                    continue    
+                                else:
+                                    enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90 or enemies[no_of_enemies]['Stats']['Health']<=0:
                                     print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
@@ -92,7 +95,10 @@ Prompt: ''')
                                 enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
                                 enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
                                 
-                                enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
+                                if enemies[no_of_enemies]['Stats']['Health'] < 0:
+                                    continue    
+                                else:
+                                    enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90:
                                     print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
@@ -110,7 +116,10 @@ Prompt: ''')
                                 enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
                                 enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
                                 
-                                enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
+                                if enemies[no_of_enemies]['Stats']['Health'] < 0:
+                                    continue    
+                                else:
+                                    enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90:
                                     print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
@@ -129,7 +138,10 @@ Prompt: ''')
                                 enemy_attack_dict = enemies[no_of_enemies]['Moves']['Attacks']
                                 enemey_attack_list = tuple(enemies[no_of_enemies]['Moves']['Attacks'].keys())
                                 
-                                enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
+                                if enemies[no_of_enemies]['Stats']['Health'] < 0:
+                                    continue    
+                                else:
+                                    enemies[no_of_enemies]['Stats']['Health'] = enemies[no_of_enemies]['Stats']['Health']-PCattacks[PCatk_Index[int(PCattack)-1]]
                                 if (randint(0,100)+PC['Stats']['Defense'])>90:
                                     print("\nAttack dodged.")
                                     print(enemies[no_of_enemies]['Name']+"'s health: " + str(enemies[no_of_enemies]['Stats']['Health']))
@@ -410,34 +422,38 @@ Selena: "Don't, you don't understand the consequences, if you help him obtain th
     elif MainChar['Class'] == 'Mage':
         print('''Selena narrows her eyes as she looks you up and down.
 "A mage from Eldevar... I thought you all had fled, if you still have your power, I could use your help. If you’ve survived this long, it means you’re strong—and we need strength. But strength with a cause. The staff is too dangerous to fall into the hands of warriors who don’t understand its true power. Help me stop them. Unless, of course, you’re here to side with him..."''')
-    ally_choice_1 = input('''
-          
-(You are now presented with the first major choice—whether to side with Kornak, Selena, or remain neutral for now.)
+    while True:
+        ally_choice_1 = input('''
+            
+    (You are now presented with the first major choice—whether to side with Kornak, Selena, or remain neutral for now.)
 
-Option 1: Ally with Kornak.
-Option 2: Ally with Selena.
-Option 3: "I...don't remember anything...what even is going on?!"
+    Option 1: Ally with Kornak.
+    Option 2: Ally with Selena.
+    Option 3: "I...don't remember anything...what even is going on?!"
 
-Prompt: ''')
-    if ally_choice_1 == '1':
-        print('''
-Konrak: Nods approvingly, his grip on his axe tightening.
-"Good. We need to move quickly if we’re going to take the staff before anyone else does."
-              
-              ''')
-    elif ally_choice_1 == '2':
-        print('''
-Selena: Gives a small, relieved smile.
-"I knew you’d make the right choice War Mage. Together, we might be able to prevent another disaster from taking place..."  
-  
-              ''')
-    elif ally_choice_1 == '3':
-        print('''
-Selena: Looks over observingly, it seemed like she was going to say something, before she was interrupted...
+    Prompt: ''')
+        if ally_choice_1 == '1':
+            print('''
+    Konrak: Nods approvingly, his grip on his axe tightening.
+    "Good. We need to move quickly if we’re going to take the staff before anyone else does."
                 
                 ''')
-    else:
-        print("################### Wrong Input, try again. ###################")
+            break
+        elif ally_choice_1 == '2':
+            print('''
+    Selena: Gives a small, relieved smile.
+    "I knew you’d make the right choice War Mage. Together, we might be able to prevent another disaster from taking place..."  
+    
+                ''')
+            break
+        elif ally_choice_1 == '3':
+            print('''
+    Selena: Looks over observingly, it seemed like she was going to say something, before she was interrupted...
+                    
+                    ''')
+            break
+        else:
+            print("################### Wrong Input, try again. ###################")
     
     print('''
 Narrator:

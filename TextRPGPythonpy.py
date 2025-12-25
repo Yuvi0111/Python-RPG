@@ -1,8 +1,18 @@
 from random import randint
 from random import choice
 import pickle
+import pymysql as mysql
 def main():
     chars = pickle.load(open('characters.dat', 'rb'))
+    #Structure of characters.dat
+    #chars = {
+    #    'MainCharacter':{'Name':'', 'Sex':'', 'Class':'', 'Stats':{'Health':100, 'Defense':5,'Level':0 ,'XP':0}, 'Money':0, 'Moves':{'Attacks   ':{}, 'Defense':{}}, 'Inventory':['Small health potion', 'Medium health potion','Large health potion'],'Choices':{'Ally':''},'Progress':''},
+    #    'BanditLeader':{'Name':'Bandit Leader', 'Sex':'Male', 'Class':'Bandit', 'Stats':{'Health':125}, 'Moves':{'Attacks':{'Throwing Axe':13,'Strike':18}, 'Defense':{}}, 'Inventory':[None]},
+    #    'Bandit':{'Name':'Bandit', 'Sex':'Male', 'Class':'Bandit', 'Stats':{'Health':75}, 'Moves':{'Attacks':{'Strike':13,'Bleed':10}, 'Defense':{}}, 'Inventory':[None]},
+    #    'Goblin':{'Name':'Goblin', 'Sex':'Undefined', 'Class':'Humanoid Monster', 'Stats':{'Health':60}, 'Moves':{'Attacks':{'Scratch':15,'Bleed':12}, 'Defense':{}}, 'Inventory':[None]},
+    #    'Gorgon':{'Name':'Gorgon', 'Sex':'Undefined', 'Class':'Humanoid Monster', 'Stats':{'Health':70}, 'Moves':{'Attacks':{'Freeze':15,'Slap':20}, 'Defense':{}}, 'Inventory':[None]},
+    #    'Hostile Nordwin Warrior':{'Name':'Hostile Nordwin Warrior', 'Sex':'Male', 'Class':'Nordwin', 'Stats':{'Health':80}, 'Moves':{'Attacks':{'Stab':16,'Kick':11}, 'Defense':{}}, 'Inventory':[None]}
+    #    } 
     items = {
         'Health Consumables':{'Small health potion':20, 'Medium health potion':40, 'Large health potion':60, 'Defense boost':40}
         }
@@ -28,17 +38,45 @@ Input: """
             print('\n\n----ACT 1----')
             act1(chars, chars['MainCharacter'], items, chars['MainCharacter']['Choices']['Ally'])          
         elif menu_input=='2':
-            name = input("Enter character name: ")
             while True:
+                name = input('Enter character name: ').strip()
                 try:
                     with open('savefile'+'_'+name+'.dat', 'rb') as file:
                         MainChar = pickle.load(file)
                         chars['MainCharacter'] = MainChar
                         print("Character loaded successfully.")
-                        if chars['MainCharacter']['Progress'] == 'Act 1.0': #For demo purposes, setting progress to Act 1.0
-                            act1(chars, chars['MainCharacter'], items, chars['MainCharacter']['Choices']['Ally'])
+                        while True:
+                            menu_input = input('''
+    1. Continue
+    2. View Character History
+    Prompt: ''')
+                            if menu_input=='1':
+                                if chars['MainCharacter']['Progress'] == 'Act 1.0': #For demo purposes, setting progress to Act 1.0
+                                    act1(chars, chars['MainCharacter'], items, chars['MainCharacter']['Choices']['Ally'])
+                                else:
+                                    print("Save Corrupted. Unable to load progress.")
+                                    break
+                            elif menu_input=='2':
+                                print('\n\nCharacter History:')
+                                connection = mysql.connect(
+                                host='localhost',
+                                user='root',
+                                password='1234',
+                                database='textrpg_'+chars['MainCharacter']['Name']
+                                )
+                                cursor = connection.cursor()
+                                cursor.execute("SELECT * FROM enemies")
+                                rows = cursor.fetchall()
+                                for row in rows:
+                                    print(row)
+                                cursor.close()
+                                connection.close()
+                            else:
+                                print('Invalid input, try again.')
                 except FileNotFoundError:
                     print('Save file not found. Please try re-entering the name.')
+                except Exception as error:
+                    print('An error occurred while loading the character:', str(error))
         elif menu_input=='3':
             exit()
 
@@ -46,9 +84,41 @@ def save(chars):
     with open('savefile'+'_'+chars['MainCharacter']['Name']+'.dat', 'wb') as file:
                 pickle.dump(chars['MainCharacter'], file)
     print("Game Saved Successfully.")
+def recorddata(enemies, PC, Victory):
+    if Victory==True:
+            Victory='Won'
+    elif Victory==False:
+            Victory='Lost'
+    try:
+        connection = mysql.connect(
+            host='localhost',
+            user='root',
+            password='1234',
+        )
+    except Exception as e:
+        print("Error connecting to MySQL database:", e)
+        print("Data not being recorded, please check your MySQL settings.")
+        return
+    cursor = connection.cursor()
+    cursor.execute("CREATE DATABASE IF NOT EXISTS textrpg_"+PC['Name']) #Create the database if it doesn't exist
+    cursor.execute("USE textrpg_"+PC['Name'])  # Select the database
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS enemies (
+            Enemies varchar(255),
+            Victory varchar(5),
+            Timestamp DATETIME DEFAULT NOW()
+        )
+    """)
+    record_enemy = ''
+    for enemy in range(len(enemies)):
+        record_enemy += '_'+enemies[enemy]['Name']
+    cursor.execute("INSERT INTO enemies (Enemies, Victory) VALUES (%s, %s)",
+                    (record_enemy, Victory))
+    connection.commit()
+    cursor.close()
+    connection.close()
 
-
-def combat(enemies, PC, items, runaway=True):
+def combat(enemies, PC, items, runaway=True, sql=True):
     print('You are now engaged in a battle with: ')
     for enemy in range(len(enemies)):
         print(enemies[enemy]['Name'])
@@ -304,6 +374,8 @@ Prompt: ''')
         if PC['Money']>money_lost:
             PC['Money'] -= money_lost
             print("Some of your money was lost upon defeat...")
+        if sql==True:
+            recorddata(enemies, PC, Victory)
         return Victory
     elif EnemyAlive==False:
         print("\n\nNarrator: You have won the battle.")
@@ -316,7 +388,8 @@ Prompt: ''')
         print("Total balance:", PC['Money'])
         print("XP Earned:", xp_earned)
         print("Total XP:", PC['Stats']['XP'])
-        
+        if sql==True:
+            recorddata(enemies, PC, Victory)
         Victory=True
         return Victory    
             
@@ -634,4 +707,33 @@ You take a stroll outside in the wild looking for some adventure...
         elif action=='4':
             save(chars)
             exit()
+        elif action == '5':
+            while True:
+                journal_choice = input('''
+        Use the Journal to keep track of thoughts on your journey.
+                                       
+        Journal:
+        1. Add Entry
+        2. View Entries
+        3. Back to Main Menu
+
+        Prompt: ''')
+                if journal_choice == '1':
+                    entry = input("Write your journal entry: ").strip()
+                    if entry!='':
+                        MainChar['Journal'].append(entry)  # Add to top of stack 
+                        print("Entry added.")
+                    else:
+                        print("Entry cannot be empty.")
+                elif journal_choice == '2':
+                    if MainChar['Journal']:
+                        print("Journal Entries (Most Recent First):")
+                        for i, entry in enumerate(reversed(MainChar['Journal']), 1):  # Reverse for LIFO display
+                            print(f"{i}. {entry}")
+                    else:
+                        print("Journal is empty.")
+                elif journal_choice == '3':
+                    break
+                else:
+                    print("Invalid input.")
 main()

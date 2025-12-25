@@ -2,6 +2,7 @@ from random import randint
 from random import choice
 import pickle
 import pymysql as mysql
+import copy
 def main():
     chars = pickle.load(open('characters.dat', 'rb'))
     #Structure of characters.dat
@@ -24,7 +25,7 @@ def menu(chars, items):
 """ 
  ------------------------TextRPG----------------------------------
 1. New Game
-2. Load Character (Not available)
+2. Load Character
 3. Exit
               
 Input: """
@@ -118,8 +119,9 @@ def recorddata(enemies, PC, Victory):
     cursor.close()
     connection.close()
 
-def combat(enemies, PC, items, runaway=True, sql=True):
+def combat(og_enemy, PC, items, runaway=True, sql=True):
     print('You are now engaged in a battle with: ')
+    enemies = copy.deepcopy(og_enemy)
     for enemy in range(len(enemies)):
         print(enemies[enemy]['Name'])
     print('\n\n\n')
@@ -369,13 +371,15 @@ Prompt: ''')
             continue
     if PC['Stats']['Health'] <= 0:
         Victory=False
-        PC['Stats']['Health'] += 100
+        PC['Stats']['Health'] = 100
         money_lost = randint(0,30)
         if PC['Money']>money_lost:
             PC['Money'] -= money_lost
             print("Some of your money was lost upon defeat...")
         if sql==True:
             recorddata(enemies, PC, Victory)
+        for health_of_enemies in range(len(enemies)):
+            enemies[health_of_enemies]['Stats']['Health'] = enemies[health_of_enemies]['Stats']['Health']+50
         return Victory
     elif EnemyAlive==False:
         print("\n\nNarrator: You have won the battle.")
@@ -383,14 +387,16 @@ Prompt: ''')
         xp_earned = randint(0,100)
         PC['Money'] += money_earned
         PC['Stats']['XP'] += xp_earned
-        PC['Stats']['Health'] += 25
+        PC['Stats']['Health'] += 5
+        if PC['Stats']['Health']>100:
+            PC['Stats']['Health']=100
         print("You earned", money_earned, "coins")
         print("Total balance:", PC['Money'])
         print("XP Earned:", xp_earned)
         print("Total XP:", PC['Stats']['XP'])
+        Victory=True
         if sql==True:
             recorddata(enemies, PC, Victory)
-        Victory=True
         return Victory    
             
             
@@ -631,7 +637,8 @@ def act1(chars, MainChar, items, ally):
     1. Go to the camp (Continue Story - Not available in demo version)
     2. Visit the Alchemist and Exilir shop
     3. Go out in the wild
-    4. Save Game and Exit
+    4. Journal
+    5. Save Game and Exit
 
                 ''')
             
@@ -639,9 +646,10 @@ def act1(chars, MainChar, items, ally):
         if action=='1':
             print("The game demo doesn't feature further story. Try selecting other options")
         elif action=='2':
-            print('''
+            print(f'''
 Narrator: You enter the shop, it almost seems empty, makes sense given the war. The shopkeeper passes you a ledger with the list of items available, not keen to talk, here is the list of items:
-
+Money:{MainChar['Money']} coins
+                  
 1. Small health potion - 50 coins
 2. Medium health potion - 100 coins
 3. Large health potion - 150 coins
@@ -704,10 +712,10 @@ You take a stroll outside in the wild looking for some adventure...
                             break
             elif randint(0,100)<60:
                 print("Nothing exciting happens.")
-        elif action=='4':
+        elif action=='5':
             save(chars)
             exit()
-        elif action == '5':
+        elif action == '4': #This is the stacks section of the code
             while True:
                 journal_choice = input('''
         Use the Journal to keep track of thoughts on your journey.
@@ -715,24 +723,44 @@ You take a stroll outside in the wild looking for some adventure...
         Journal:
         1. Add Entry
         2. View Entries
-        3. Back to Main Menu
+        3. Erase Last Entry
+        4. Back to Main Menu
 
         Prompt: ''')
                 if journal_choice == '1':
                     entry = input("Write your journal entry: ").strip()
                     if entry!='':
-                        MainChar['Journal'].append(entry)  # Add to top of stack 
+                        MainChar['Journal'].append(entry)  
                         print("Entry added.")
                     else:
                         print("Entry cannot be empty.")
                 elif journal_choice == '2':
-                    if MainChar['Journal']:
-                        print("Journal Entries (Most Recent First):")
-                        for i, entry in enumerate(reversed(MainChar['Journal']), 1):  # Reverse for LIFO display
-                            print(f"{i}. {entry}")
+                    if MainChar['Journal']!=[]:
+                        print('Total Entries:', len(MainChar['Journal']))
+                        print("Journal Entries (Last Page to First Page):") #Last in, First Out principle and stuff
+                        len_journal = len(MainChar['Journal'])
+                        for i in range(len_journal-1, -1, -1): # Just looping in reverse in a way that should be ideal for lists I think
+                            print(MainChar['Journal'][i])
+                            if i == 0:
+                                print("----- End of Journal -----")
+                                break
+                            menu_input=input("\n\n\n1. Next Page\n2. Back to Journal Menu") 
+                            if menu_input=='1':
+                                print("------------------- Next Page ------------------")
+                                continue
+                            elif menu_input=='2':
+                                break
+                            else:
+                                print("Invalid input, returning to journal menu.")
+                                break
                     else:
                         print("Journal is empty.")
                 elif journal_choice == '3':
+                    if MainChar['Journal']!=[]:
+                        MainChar['Journal'].pop()  
+                    else:
+                        print("Journal is empty, nothing to erase.")
+                elif journal_choice == '4':
                     break
                 else:
                     print("Invalid input.")

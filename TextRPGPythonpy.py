@@ -81,6 +81,125 @@ Input: """
                     print('An error occurred while loading the character:', str(error))
         elif menu_input=='3':
             exit()
+def lookforfight(chars, MainChar, items):
+    print('''
+You take a stroll outside in the wild looking for some adventure...
+
+
+                  ''')
+    if randint(0,100)>=60:
+        print("You find yourself in an ambush!")
+        while True:
+            random_enemy = choice(tuple(chars.keys()))
+            if random_enemy != 'MainCharacter':
+                Victory = combat([chars[random_enemy]], MainChar, items, runaway=True)
+                if Victory == True:
+                    print("\n\nYou return back to the town after the victory, resting and replinishing yourself.")
+                    break
+                elif Victory == False:
+                    print("\n\nYou return back to the town after the defeat, resting and replinishing yourself.")
+                    break
+        return
+    elif randint(0,100)<60:
+        print("Nothing exciting happens.")
+
+def journal():
+    while True:
+                journal_choice = input('''
+        Use the Journal to keep track of thoughts on your journey.
+                                       
+        Journal:
+        1. Add Entry
+        2. View Entries
+        3. Erase Last Entry
+        4. Back to Main Menu
+
+        Prompt: ''')
+                if journal_choice == '1':
+                    entry = input("Write your journal entry: ").strip()
+                    if entry!='':
+                        MainChar['Journal'].append(entry)  
+                        print("Entry added.")
+                    else:
+                        print("Entry cannot be empty.")
+                elif journal_choice == '2':
+                    if MainChar['Journal']!=[]:
+                        print('Total Entries:', len(MainChar['Journal']))
+                        print("Journal Entries (Last Page to First Page):") #Last in, First Out principle and stuff
+                        len_journal = len(MainChar['Journal'])
+                        for i in range(len_journal-1, -1, -1): # Just looping in reverse in a way that should be ideal for lists I think
+                            print(MainChar['Journal'][i])
+                            if i == 0:
+                                print("----- End of Journal -----")
+                                break
+                            menu_input=input("\n\n\n1. Next Page\n2. Back to Journal Menu") 
+                            if menu_input=='1':
+                                print("------------------- Next Page ------------------")
+                                continue
+                            elif menu_input=='2':
+                                break
+                            else:
+                                print("Invalid input, returning to journal menu.")
+                                break
+                    else:
+                        print("Journal is empty.")
+                elif journal_choice == '3':
+                    if MainChar['Journal']!=[]:
+                        print('Entry deleted:', MainChar['Journal'].pop())
+                    else:
+                        print("Journal is empty, nothing to erase.")
+                elif journal_choice == '4':
+                    break
+                else:
+                    print("Invalid input.")
+
+def shop(MainChar):
+    print(f'''
+Narrator: You enter the shop, it almost seems empty, makes sense given the war. The shopkeeper passes you a ledger with the list of items available, not keen to talk, here is the list of items:
+Money:{MainChar['Money']} coins
+                  
+1. Small health potion - 50 coins
+2. Medium health potion - 100 coins
+3. Large health potion - 150 coins
+4. Defense boost - 125 coins
+                  ''')
+    while True:
+        action = input('Prompt to buy: ')
+        if action=='1':
+            if MainChar['Money'] >= 50:
+                MainChar['Money']-=50
+                MainChar['Inventory'].append('Small health potion')
+                print('Purchased successfully.')
+                break
+            else:
+                print("Not enough money.")
+        elif action=='2':
+            if MainChar['Money'] >= 100:
+                MainChar['Money']-=100
+                MainChar['Inventory'].append('Medium health potion')
+                print('Purchased successfully.')
+                break
+            else:
+                print("Not enough money.")
+        elif action=='3':
+            if MainChar['Money'] >= 150:
+                MainChar['Money']-=150
+                MainChar['Inventory'].append('Large health potion')
+                print('Purchased successfully.')
+                break
+            else:
+                print("Not enough money.")
+        elif action=='4':
+            if MainChar['Money'] >= 125:
+                MainChar['Money']-=125
+                MainChar['Inventory'].append('Defense boost')
+                print('Purchased successfully.')
+                break
+            else:
+                print("Not enough money.")
+        else:
+            print("################### WRONG INPUT ########################")
+            break
 
 def levelup(PC):
     levelup_xp = 100
@@ -697,124 +816,14 @@ def act1(chars, MainChar, items, ally):
                         print('Narrator: You feel like you need to be stronger before facing the challenges ahead, but you go ahead and meet Konrak Anyways...')
                         print("Konrak: \"You look like you could use some more training before we head out, you're still weak from recent events...you should train and explore a little more before we set out.\"")
         elif action=='2':
-            print(f'''
-Narrator: You enter the shop, it almost seems empty, makes sense given the war. The shopkeeper passes you a ledger with the list of items available, not keen to talk, here is the list of items:
-Money:{MainChar['Money']} coins
-                  
-1. Small health potion - 50 coins
-2. Medium health potion - 100 coins
-3. Large health potion - 150 coins
-4. Defense boost - 125 coins
-                  ''')
-            while True:
-                action = input('Prompt to buy: ')
-                if action=='1':
-                    if MainChar['Money'] >= 50:
-                        MainChar['Money']-=50
-                        MainChar['Inventory'].append('Small health potion')
-                        print('Purchased successfully.')
-                        break
-                    else:
-                        print("Not enough money.")
-                elif action=='2':
-                    if MainChar['Money'] >= 100:
-                        MainChar['Money']-=100
-                        MainChar['Inventory'].append('Medium health potion')
-                        print('Purchased successfully.')
-                        break
-                    else:
-                        print("Not enough money.")
-                elif action=='3':
-                    if MainChar['Money'] >= 150:
-                        MainChar['Money']-=150
-                        MainChar['Inventory'].append('Large health potion')
-                        print('Purchased successfully.')
-                        break
-                    else:
-                        print("Not enough money.")
-                elif action=='4':
-                    if MainChar['Money'] >= 125:
-                        MainChar['Money']-=125
-                        MainChar['Inventory'].append('Defense boost')
-                        print('Purchased successfully.')
-                        break
-                    else:
-                        print("Not enough money.")
-                else:
-                    print("################### WRONG INPUT ########################")
-                    break
+            shop(MainChar)
         elif action=='3':
-            print('''
-You take a stroll outside in the wild looking for some adventure...
-
-
-                  ''')
-            if randint(0,100)>=60:
-                print("You find yourself in an ambush!")
-                while True:
-                    random_enemy = choice(tuple(chars.keys()))
-                    if random_enemy != 'MainCharacter':
-                        Victory = combat([chars[random_enemy]], MainChar, items, runaway=True)
-                        if Victory == True:
-                            print("\n\nYou return back to the town after the victory, resting and replinishing yourself.")
-                            break
-                        elif Victory == False:
-                            print("\n\nYou return back to the town after the defeat, resting and replinishing yourself.")
-                            break
-            elif randint(0,100)<60:
-                print("Nothing exciting happens.")
+            lookforfight(chars, MainChar, items)
         elif action=='5':
             save(chars)
             exit()
         elif action == '4': #This is the stacks section of the code
-            while True:
-                journal_choice = input('''
-        Use the Journal to keep track of thoughts on your journey.
-                                       
-        Journal:
-        1. Add Entry
-        2. View Entries
-        3. Erase Last Entry
-        4. Back to Main Menu
-
-        Prompt: ''')
-                if journal_choice == '1':
-                    entry = input("Write your journal entry: ").strip()
-                    if entry!='':
-                        MainChar['Journal'].append(entry)  
-                        print("Entry added.")
-                    else:
-                        print("Entry cannot be empty.")
-                elif journal_choice == '2':
-                    if MainChar['Journal']!=[]:
-                        print('Total Entries:', len(MainChar['Journal']))
-                        print("Journal Entries (Last Page to First Page):") #Last in, First Out principle and stuff
-                        len_journal = len(MainChar['Journal'])
-                        for i in range(len_journal-1, -1, -1): # Just looping in reverse in a way that should be ideal for lists I think
-                            print(MainChar['Journal'][i])
-                            if i == 0:
-                                print("----- End of Journal -----")
-                                break
-                            menu_input=input("\n\n\n1. Next Page\n2. Back to Journal Menu") 
-                            if menu_input=='1':
-                                print("------------------- Next Page ------------------")
-                                continue
-                            elif menu_input=='2':
-                                break
-                            else:
-                                print("Invalid input, returning to journal menu.")
-                                break
-                    else:
-                        print("Journal is empty.")
-                elif journal_choice == '3':
-                    if MainChar['Journal']!=[]:
-                        print('Entry deleted:', MainChar['Journal'].pop())
-                    else:
-                        print("Journal is empty, nothing to erase.")
-                elif journal_choice == '4':
-                    break
-                else:
-                    print("Invalid input.")
+            journal()
 
 def ashen(chars, MainChar, items, ally):
     """

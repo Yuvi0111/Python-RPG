@@ -37,7 +37,8 @@ Input: """
             chars['MainCharacter']['Progress'] = 'Act 1.0'
             save(chars)
             print('\n\n----ACT 1----')
-            act1(chars, chars['MainCharacter'], items, chars['MainCharacter']['Choices']['Ally'])          
+            act1(chars, chars['MainCharacter'], items, chars['MainCharacter']['Choices']['Ally'])
+            cathedral_and_beyond(chars, chars['MainCharacter'], items, chars['MainCharacter']['Choices']['Ally'])          
         elif menu_input=='2':
             while True:
                 name = input('Enter character name: ').strip()
@@ -81,10 +82,23 @@ Input: """
         elif menu_input=='3':
             exit()
 
+def levelup(PC):
+    levelup_xp = 100
+    while PC['Stats']['XP'] >= levelup_xp:
+        PC['Stats']['Level'] += 1
+        PC['Stats']['XP'] -= levelup_xp
+        PC['Stats']['Health'] += 20
+        PC['Stats']['Defense'] += 5
+        print("\n\nCongratulations! You've leveled up to Level", PC['Stats']['Level'])
+        print("Health increased to:", PC['Stats']['Health'])
+        print("Defense increased to:", PC['Stats']['Defense'])
+        levelup_xp += 100
+
 def save(chars):
     with open('savefile'+'_'+chars['MainCharacter']['Name']+'.dat', 'wb') as file:
                 pickle.dump(chars['MainCharacter'], file)
     print("Game Saved Successfully.")
+
 def recorddata(enemies, PC, Victory):
     if Victory==True:
             Victory='Won'
@@ -395,6 +409,7 @@ Prompt: ''')
         print("XP Earned:", xp_earned)
         print("Total XP:", PC['Stats']['XP'])
         Victory=True
+        levelup(PC)
         if sql==True:
             recorddata(enemies, PC, Victory)
         return Victory    
@@ -644,7 +659,43 @@ def act1(chars, MainChar, items, ally):
             
         action = input('Prompt: ')
         if action=='1':
-            print("The game demo doesn't feature further story. Try selecting other options")
+            if ally=='1':
+                if MainChar['Class']=='Warrior':
+                    if MainChar['Stats']['Level']>=3:
+                        print('You look ready for the journey ahead, you head to the tavern to meet Selena and plan your next move towards the staff of Zorith...')
+                        print('Narrator: You meet Selena at the tavern, and you both plan your next move towards the staff of Zorith...')
+                        print('Selena: "Glad you made it, we need to move quickly if we want to reach the staff before Norwind\'s warriors do... as a warrior, your strength and connections will be invaluable on this journey."')
+                        outcome = ashen(chars, MainChar, items, ally)
+                        if outcome == True:
+                            return 
+                        elif outcome == False:
+                            continue
+                    elif MainChar['Stats']['Level']<3:
+                        print('Narrator: You feel like you need to be stronger before facing the challenges ahead, but you go ahead and meet Selena Anyways...')
+                        print("Selena: \"You look like you could use some more training before we head out, you're still weak from recent events...you should train and explore a little more before we set out.\"")
+            elif ally=='2':
+                if MainChar['Class']=='Mage':
+                    if MainChar['Stats']['Level']>=3:
+                        print('You look ready for the journey ahead, you head to the camp to meet Konrak and plan your next move towards the staff of Zorith...')
+                        print('Narrator: You meet Konrak at the camp, and you both plan your next move towards the staff of Zorith...')
+                        print('Konrak: "Glad you made it, we need to move quickly if we want to reach the staff before Eldevar\'s mages do... as a mage, your arcane prowess will be invaluable on this journey."')
+                        ashen(chars, MainChar, items, ally)
+                    elif MainChar['Stats']['Level']<3:
+                        print('Narrator: You feel like you need to be stronger before facing the challenges ahead, but you go ahead and meet Konrak Anyways...')
+                        print("Konrak: \"You look like you could use some more training before we head out, you're still weak from recent events...you should train and explore a little more before we set out.\"")
+                elif MainChar['Class']=='Warrior':
+                    if MainChar['Stats']['Level']>=3:
+                        print('You look ready for the journey ahead, you head to the camp to meet Konrak and plan your next move towards the staff of Zorith...')
+                        print('Narrator: You meet Konrak at the camp, and you both plan your next move towards the staff of Zorith...')
+                        print('Konrak: "Glad you made it, we need to move quickly if we want to reach the staff before Eldevar\'s mages do... as a warrior, your strength and connections will be invaluable on this journey."')
+                        outcome = ashen(chars, MainChar, items, ally)
+                        if outcome == True:
+                            return 
+                        elif outcome == False:
+                            continue
+                    elif MainChar['Stats']['Level']<3:
+                        print('Narrator: You feel like you need to be stronger before facing the challenges ahead, but you go ahead and meet Konrak Anyways...')
+                        print("Konrak: \"You look like you could use some more training before we head out, you're still weak from recent events...you should train and explore a little more before we set out.\"")
         elif action=='2':
             print(f'''
 Narrator: You enter the shop, it almost seems empty, makes sense given the war. The shopkeeper passes you a ledger with the list of items available, not keen to talk, here is the list of items:
@@ -757,11 +808,390 @@ You take a stroll outside in the wild looking for some adventure...
                         print("Journal is empty.")
                 elif journal_choice == '3':
                     if MainChar['Journal']!=[]:
-                        MainChar['Journal'].pop()  
+                        print('Entry deleted:', MainChar['Journal'].pop())
                     else:
                         print("Journal is empty, nothing to erase.")
                 elif journal_choice == '4':
                     break
                 else:
                     print("Invalid input.")
+
+def ashen(chars, MainChar, items, ally):
+    """
+    ACT 2 – THE FALL AND THE ASCENT (Final Act)
+    This act resolves the story based on the player's early allegiance:
+    ally == '1' -> Kornak (Norwind / Warrior path)
+    ally == '2' -> Selena (Mage / Eldevar path)
+
+    Themes:
+    - Ruin of Eldevar
+    - Truth of the Staff of Zorith
+    - Final antagonist: Arin the Seraph of Zorith (the one who ended the war)
+    - Final moral choice: Restore, Destroy, or Rule
+    """
+
+    print("\n\n---- ACT 2: THE ASHEN KINGDOM ----\n")
+
+    input('''
+Narrator:
+"Weeks have passed since the uneasy truce. Eldevar rots in silence now. The sky above the kingdom is forever stained violet,
+a scar left by the Staff of Zorith when it was unleashed during the final moments of the war."
+
+"Whispers spread of a single figure seen at the heart of the capital—an angelic woman crowned in light and ruin.
+The one who took the staff. The one who ended everything."
+
+(You feel something stir inside you. The staff is calling.)
+
+Press Enter to continue...
+''')
+
+    # --- LOCATION 1: THE SUNKEN CATHEDRAL ---
+    print("\n--- LOCATION: THE SUNKEN CATHEDRAL OF ELDEVAR ---\n")
+
+    d = input('''
+Narrator:
+"You arrive at the Sunken Cathedral, once the spiritual heart of Eldevar. Half of it lies buried beneath fractured earth,
+and the rest floats unnaturally, suspended by lingering magic."
+
+"Souls whisper here—mages and warriors alike, all victims of the staff."
+''')
+
+    if ally == '1':
+        input('''
+Kornak:
+"This place makes my skin crawl. Norwind steel wasn’t meant for magic like this…"
+
+Narrator:
+(Kornak looks uneasy. For the first time, doubt creeps into his voice.)
+
+              
+Dialogue: 1. We'll get through this. (Rest your mind and encourage him)
+          2. Stay alert. This place is dangerous. (Dismiss his concerns to stay alert)
+          3. I smell something...we need to be careful. (Rolls perception check)''')
+        if d == '1':
+            input('''
+Kornak: "Yeah… you’re right. We can’t let our guard down."
+
+Narrator: (Something keeps watch from the shadows, undetectable, detecting your strength it hides itself to safety.)
+          
+            ''')
+        elif d == '2':
+            input('''
+Kornak: (He tightens his grip on his axe.)
+        "Always. This place gives me the creeps."
+
+Narrator: (Something keeps watch from the shadows, undetectable, detecting your strength it hides itself to safety.)
+          
+            ''')
+        elif d == '3':
+            if randint(0,100)>=50:
+                input('''Kornak: (He pauses, sniffing the air.)
+                                "You’re right… there’s something off here."
+                                (Suddenly, a spectral warrior materializes, eyes glowing with sorrow and rage.)
+                                Spectral Warrior: "You trespass on sacred ground…"
+                                ''')
+                Victory = combat([{
+                    'Name': 'Spectral Warrior',
+                    'Stats': {'Health': 100},
+                    'Moves': {'Attacks': {'Spectral Strike': 25, 'Glowing Gaze': 30}},
+                    'Inventory': [None]
+                }], MainChar, items, runaway=False)
+            elif randint(0,100)<50:
+                input('''Kornak: (He pauses, sniffing the air.)
+                                "I don’t sense anything… maybe it was nothing."
+                         Narrator: (He relaxes slightly, you too imagine it must be a false alarm.)
+                                   (Although, something had already noticed you looking for it...)
+                                   (And it strikes you, wounding you before you can react.)
+                                   (You manage to fend it off, but not without injury.)
+                                   (A spectral warrior materializes, eyes glowing with sorrow and rage.)
+                         Spectral Warrior: "You trespass on sacred ground…"
+
+                                ''')
+                MainChar['Stats']['Health']-=20
+                if MainChar['Stats']['Health']<0:
+                    MainChar['Stats']['Health']=20
+                Victory = combat([{
+                    'Name': 'Spectral Warrior 1',
+                    'Stats': {'Health': 120},
+                    'Moves': {'Attacks': {'Spectral Strike': 25, 'Glowing Gaze': 30}},
+                    'Inventory': [None]
+                }, {
+                    'Name': 'Spectral Warrior 2',
+                    'Stats': {'Health': 120},
+                    'Moves': {'Attacks': {'Spectral Strike': 25, 'Glowing Gaze': 30}},
+                    'Inventory': [None]
+                }], MainChar, items, runaway=False)
+            if Victory == False:
+                    print("\nNarrator: The spectral warrior overwhelms you. You collapse…\nReturning to the village to recover. Retry.\n")
+                    return False
+            elif Victory == True:
+                    print("\nNarrator: You defeat the spectral warrior. As it crumbles, you notice a sword hilt radiating from it...\n")
+                    if MainChar['Class']=='Warrior':
+                        input('''
+                              Kornak: "That sword... I can feel its power. It might come in handy. You should keep it"
+                                Narrator: (You learn 'Spectral Blade', a new attack.)
+                                ''')
+                        MainChar['Moves']['Attacks']['Spectral Blade']=40
+                        MainChar['Choices']['kornakHasSpectralBlade']=False
+                    elif MainChar['Class']=='Mage':
+                        input('''
+                              Kornak: "That sword... I can feel its power. It might come in handy. I'll keep it, since you probably won't be able to use it effectively."
+                              Narrator: (You watch as Kornak studies the sword, then tucks it away for later use. This should be handy....)
+                                ''')
+                        MainChar['Choices']['kornakHasSpectralBlade']=True
+                    healthreset(MainChar)
+                    MainChar['Stats']['XP']+=250
+                    levelup(MainChar)
+                    print('Narrator: "If these are only echoes… what does that make the one who commands them?"')
+                    return True
+    elif ally == '2':
+        d = input('''
+Selena:
+"I trained here… before the war. Before she came."
+
+Narrator:
+(Her fists clench. Rage, grief, and guilt all tangled together.)
+
+Dialogue: 1. We need to focus on the staff, and our surroundings. (Encourage her to stay focused while keeping a sharp eye)
+          2. Take a moment. This place affects you. (Acknowledge her pain)
+          3. Be careful. There’s something wrong here. (Rolls perception check)
+''')
+        if d == '1':
+            input('''
+Selena: "You're right. We can't let our guard down."
+
+Narrator: (Something keeps watch from the shadows, undetectable, detecting your strength it hides itself to safety.)
+          
+            ''')
+        elif d == '2':
+            input('''
+Selena: (She takes a deep breath, trying to steady herself.)
+            "This place... it brings back memories. But we have to keep moving."
+
+Narrator: (Something keeps watch from the shadows, undetectable, detecting your strength it hides itself to safety.)
+            ''')
+        elif d == '3':
+            if randint(0,100)>=50:
+                input('''Selena: (She pauses, sniffing the air.)
+                                "You’re right… there’s something off here."
+                                (Suddenly, a spectral mage materializes, eyes glowing with sorrow and rage.)
+                                Spectral Mage: "You desecrate sacred ground…"
+                                ''')
+                Victory = combat([{
+                    'Name': 'Spectral Mage 1',
+                    'Stats': {'Health': 95},
+                    'Moves': {'Attacks': {'Arcane Blast': 30, 'Ethereal Chains': 40}},
+                    'Inventory': [None]
+                }, {
+                    'Name': 'Spectral Mage 2',
+                    'Stats': {'Health': 95},
+                    'Moves': {'Attacks': {'Arcane Blast': 30, 'Ethereal Chains': 40}},
+                    'Inventory': [None]
+                }], MainChar, items, runaway=False)
+            elif randint(0,100)<50:
+                input('''Selena: (She pauses, sniffing the air.)
+                                "I don’t sense anything… maybe it was nothing."
+                         Narrator: (She relaxes slightly, you too imagine it must be a false alarm.)
+                                   (Although, something had already noticed you...)
+                                   (And it strikes you, wounding you before you can react.)
+                                   (You manage to fend it off, but not without injury.)
+                                   (A spectral mage materializes, eyes glowing with sorrow and rage.)
+                         Spectral Mage: "You desecrate sacred ground…"
+
+                                ''')
+                MainChar['Stats']['Health']-=20
+                if MainChar['Stats']['Health']<0:
+                    MainChar['Stats']['Health']=20
+                Victory = combat([{
+                    'Name': 'Spectral Mage',
+                    'Stats': {'Health': 100},
+                    'Moves': {'Attacks': {'Arcane Blast': 25, 'Ethereal Chains': 30}},
+                    'Inventory': [None]
+                }], MainChar, items, runaway=False)
+            if Victory == False:
+                    print("\nNarrator: The spectral mage overwhelms you. You collapse…\nReturning to the village to recover. Retry.\n")
+                    return False
+            elif Victory == True:
+                    print("\nNarrator: You defeat the spectral mage. As it crumbles, you notice a spell scroll radiating from it...\n")
+                    if MainChar['Class']=='Mage':
+                        MainChar['Moves']['Attacks']['Arcane Blast']=35
+                        input('''
+                              Selena: "That spell... I can feel its power. It might come in handy. You should keep it"
+                                Narrator: (You learn 'Spectral Bolt', a new attack.)
+                                ''')
+                        MainChar['Choices']['selenaHasSpectralBolt']=False
+                    elif MainChar['Class']=='Warrior':
+                        input('''
+                              Selena: "That spell... I can feel its power. It might come in handy. I'll keep it, since you probably won't be able to use it effectively."
+                              Narrator: (You watch as Selena studies the scroll, then tucks it away for later use. This should be handy....)
+                                ''')
+                        MainChar['Choices']['selenaHasSpectralBolt']=True
+                    healthreset(MainChar)
+                    MainChar['Stats']['XP']+=250
+                    levelup(MainChar)
+                    print('Narrator: "If these are only echoes… what does that make the one who commands them?"')
+                    return True
+        
+def healthreset(PC):
+    PC['Stats']['Health'] = 100+PC['Stats']['Level']*20
+    
+
+def cathedral_and_beyond(chars, MainChar, items):
+    
+    input('''
+Narrator:
+"Within the cathedral, a lone survivor appears—an Archivist bound to magic chains."
+
+Archivist:
+"The Seraph of Zorith… Arin… she believed herself our savior. The staff showed her a future without war."
+
+"But the staff does not grant peace. It ENFORCES it."
+''')
+
+    input('''
+Narrator:
+"You spend a long moment with the Archivist, piecing together the present and find information."
+          
+"You learn the truth: Arin was once Eldevar’s guardian. When the war peaked, she took the staff,
+ended both armies—and the kingdom—with divine force."
+
+"She still rules from the Shattered Spire."
+''')
+
+    # --- LOCATION 2: THE ASHEN WILDS ---
+    print("\n--- LOCATION: THE ASHEN WILDS ---\n")
+
+    input('''
+Narrator:
+"Beyond the cathedral lies a land frozen in the moment of destruction.
+Warriors turned to stone mid-charge. Mages crystallized in spellcasting poses.
+The ground is littered with shattered weapons and broken dreams.
+The staff’s magic lingers here, a haunting reminder of that final day.
+You don't have too much time, you need to make a decision quickly....or keep moving forward...you don't have any time to waste or to hestitate...
+Will you stop and pay your respects to the fallen, or will you march onward in silence?"
+''')
+
+    input('''
+''')
+
+    choice = input('''
+Prompt:
+1. Pray for the fallen
+2. March onward in silence
+
+Choice: ''')
+
+    if choice == '1':
+        input('''
+Narrator:
+"You kneel. The land trembles softly. The staff responds… approvingly."
+(+Hidden Mercy Flag)
+''')
+    else:
+        input('''
+Narrator:
+"You hesitated. You harden your heart. The past will not stop you."
+(+Hidden Resolve Flag)
+''')
+
+    # --- FINAL LOCATION: THE SHATTERED SPIRE ---
+    print("\n--- FINAL LOCATION: THE SHATTERED SPIRE ---\n")
+
+    input('''
+Narrator:
+"The Shattered Spire pierces the sky, floating above the ruined capital.
+Light pours from its peak like a false sun."
+
+"She waits for you."
+''')
+
+    input('''
+Arin, Seraph of Zorith:
+"So… the lost one returns. The staff told me you would."
+
+"I ended suffering. I ended chaos. Why do you still resist peace?"
+''')
+
+    input('''
+Narrator:
+(She descends—wings of pure magic unfurling, the Staff of Zorith burning with impossible power.)
+
+FINAL BATTLE INITIATED
+''')
+
+    Victory = combat([{
+        'Name':'Arin, Seraph of Zorith',
+        'Stats':{'Health':200},
+        'Moves':{'Attacks':{'Judgment':35,'Divine Ruin':45}},
+        'Inventory':[None]
+    }], MainChar, items, runaway=False)
+
+    if Victory == False:
+        input("\nNarrator: The staff rejects your weakness. The world fades… (Bad Ending)\n")
+        return
+
+    # --- POST BOSS ---
+    print("\n--- THE STAFF OF ZORITH ---\n")
+
+    input('''
+Narrator:
+"Arin falls, light fading from her wings. The staff floats before you."
+
+"It recognizes you as its master."
+''')
+
+    # --- FINAL CHOICE ---
+    ending = input('''
+FINAL CHOICE:
+1. Restore the Kingdom (Sacrifice the Staff)
+2. Destroy the Staff Forever
+3. Rule with the Staff as King/Queen
+
+Choice: ''')
+
+    if ending == '1':
+        input('''
+ENDING: THE RENEWAL
+
+Narrator:
+"You channel the staff one final time. The land heals. The dead rest. Magic fades from the world."
+
+"Eldevar rises—not as it was, but as it should be."
+
+(You vanish into legend.)
+
+GOOD ENDING
+''')
+
+    elif ending == '2':
+        input('''
+ENDING: THE SILENCE
+
+Narrator:
+"You shatter the staff. Magic screams—then dies."
+
+"No gods. No weapons of ruin. Only people."
+
+(The world is safe… but forever changed.)
+
+BITTERSWEET ENDING
+''')
+
+    elif ending == '3':
+        input('''
+ENDING: THE CROWN OF ORDER
+
+Narrator:
+"You take the throne. War ends. Crime ends. Freedom… ends."
+
+"History will call you a savior."
+
+"Time will call you a tyrant."
+
+DARK ENDING
+''')
+
+    else:
+        print("The staff consumes your indecision. (Secret Failure Ending)")
+
 main()
